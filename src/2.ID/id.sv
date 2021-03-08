@@ -39,191 +39,208 @@ module id(
     assign immi = id_inst_i.data[15:0];
     assign immextu = {16'b0, immi};
     assign immexts = {{16{immi[15]}}, immi};
+    assign shamtext = {27'b0, shamt};
 
     valid_status_t instvalid;
 
     always_comb begin : alu_info
-        if (rst == RST_ENABLE)
-            id_alu_o = '{default:0};
-        else
-        case (opcode)
-            R_TYPE:
-                case (funct)
-                    R_AND:
-                        id_alu_o = '{RES_LOGIC, AND_OP};
-                    R_OR:
-                        id_alu_o = '{RES_LOGIC, OR_OP};
-                    R_XOR:
-                        id_alu_o = '{RES_LOGIC, XOR_OP};
-                    R_NOR:
-                        id_alu_o = '{RES_LOGIC, NOR_OP};
-                    R_SLL,
-                    R_SLLV:
-                        id_alu_o = '{RES_SHIFT, SLL_OP};
-                    R_SRL,
-                    R_SRLV:
-                        id_alu_o = '{RES_SHIFT, SRL_OP};
-                    R_SRA,
-                    R_SRAV:
-                        id_alu_o = '{RES_SHIFT, SRA_OP};
-                    R_SYNC:
-                        id_alu_o = '{RES_NOP, NOP_OP};
-                    default:
-                        id_alu_o = '{default:0};
-                endcase
-            I_ANDI:
-                id_alu_o = '{RES_LOGIC, AND_OP};
-            I_ORI,
-            I_LUI,
-            J_JAL:
-                id_alu_o = '{RES_LOGIC, OR_OP};
-            I_XORI:
-                id_alu_o = '{RES_LOGIC, XOR_OP};
-            I_ADDIU:
-                id_alu_o = '{RES_ARITH, ADD_OP};
-            S_PREF:
-                id_alu_o = '{RES_NOP, NOP_OP};
-            default:
-                id_alu_o = '{default:0};
-        endcase
-    end
-
-
-    always_comb begin : read_reg_info
         if (rst == RST_ENABLE) begin
+            id_alu_o = '{default:0};
+            id_wreg_o = '{default:0};
             fetch.r1_info = '{default:0};
             fetch.r2_info = '{default:0};
+            immo = '0;
         end
         else begin
-            fetch.r1_info.addr = rs;
-            fetch.r2_info.addr = rt;
-            case (opcode)
-                R_TYPE: case (funct)
-                    R_SLL,
-                    R_SRL,
+            instvalid = VALID;
+            id_jump_o = '{default:0};
+        case (opcode)
+            R_TYPE: begin
+                case (funct)
+                    J_JR: begin
+                        id_alu_o = '{default:0};
+                        id_wreg_o = '{default:0};
+                        fetch.r1_info = '{default:0};
+                        fetch.r2_info = '{default:0};
+                        immo = '0;
+                        id_jump_o = '{JUMP_ENABLE, id_oprd1_o};
+                    end
+                    R_AND: begin
+                        id_alu_o = '{RES_LOGIC, AND_OP};
+                        id_wreg_o = '{REG_ENABLE, rd};
+                        fetch.r1_info = '{REG_ENABLE, rs};
+                        fetch.r2_info = '{REG_ENABLE, rt};
+                        immo = '0;
+                    end
+                    R_OR: begin
+                        id_alu_o = '{RES_LOGIC, OR_OP};
+                        id_wreg_o = '{REG_ENABLE, rd};
+                        fetch.r1_info = '{REG_ENABLE, rs};
+                        fetch.r2_info = '{REG_ENABLE, rt};
+                        immo = '0;
+                    end
+                    R_XOR: begin
+                        id_alu_o = '{RES_LOGIC, XOR_OP};
+                        id_wreg_o = '{REG_ENABLE, rd};
+                        fetch.r1_info = '{REG_ENABLE, rs};
+                        fetch.r2_info = '{REG_ENABLE, rt};
+                        immo = '0;
+                    end
+                    R_NOR: begin
+                        id_alu_o = '{RES_LOGIC, NOR_OP};
+                        id_wreg_o = '{REG_ENABLE, rd};
+                        fetch.r1_info = '{REG_ENABLE, rs};
+                        fetch.r2_info = '{REG_ENABLE, rt};
+                        immo = '0;
+                    end
+                    R_SLL: begin
+                        id_alu_o = '{RES_SHIFT, SLL_OP};
+                        id_wreg_o = '{REG_ENABLE, rd};
+                        fetch.r1_info = '{default:0};
+                        fetch.r2_info = '{REG_ENABLE, rt};
+                        immo = shamtext;
+                    end
+                    R_SLLV: begin
+                        id_alu_o = '{RES_SHIFT, SLL_OP};
+                        id_wreg_o = '{REG_ENABLE, rd};
+                        fetch.r1_info = '{REG_ENABLE, rs};
+                        fetch.r2_info = '{REG_ENABLE, rt};
+                        immo = '0;
+                    end
+                    R_SRL: begin
+                        id_alu_o = '{RES_SHIFT, SRL_OP};
+                        id_wreg_o = '{REG_ENABLE, rd};
+                        fetch.r1_info = '{default:0};
+                        fetch.r2_info = '{REG_ENABLE, rt};
+                        immo = shamtext;
+                    end
+                    R_SRLV: begin
+                        id_alu_o = '{RES_SHIFT, SRL_OP};
+                        id_wreg_o = '{REG_ENABLE, rd};
+                        fetch.r1_info = '{REG_ENABLE, rs};
+                        fetch.r2_info = '{REG_ENABLE, rt};
+                        immo = '0;
+                    end
                     R_SRA: begin
-                        fetch.r1_info.en = REG_DISABLE;
-                        fetch.r2_info.en = REG_ENABLE;
+                        id_alu_o = '{RES_SHIFT, SRL_OP};
+                        id_wreg_o = '{REG_ENABLE, rd};
+                        fetch.r1_info = '{REG_ENABLE, rs};
+                        fetch.r2_info = '{default:0};
+                        immo = shamtext;
+                    end
+                    R_SRAV: begin
+                        id_alu_o = '{RES_SHIFT, SRA_OP};
+                        id_wreg_o = '{REG_ENABLE, rd};
+                        fetch.r1_info = '{REG_ENABLE, rs};
+                        fetch.r2_info = '{REG_ENABLE, rt};
+                        immo = '0;
+                    end
+                    R_SYNC: begin
+                        id_alu_o = '{RES_NOP, NOP_OP};
+                        id_wreg_o = '{REG_ENABLE, rd};
+                        fetch.r1_info = '{REG_ENABLE, rs};
+                        fetch.r2_info = '{REG_ENABLE, rt};
+                        immo = '0;
                     end
                     default: begin
-                        fetch.r1_info.en = REG_ENABLE;
-                        fetch.r2_info.en = REG_ENABLE;
+                        id_alu_o = '{default:0};
+                        id_wreg_o = '{default:0};
+                        fetch.r1_info = '{default:0};
+                        fetch.r2_info = '{default:0};
+                        immo = '0;
                     end
                 endcase
-                I_ANDI,
-                I_ORI,
-                I_XORI,
-                I_LUI,
-                I_ADDIU: begin
-                    fetch.r1_info.en = REG_ENABLE;
-                    fetch.r2_info.en = REG_DISABLE;
-                end
-                J_JAL: begin
-                    fetch.r1_info.addr = '0;
-                    fetch.r1_info.en = REG_ENABLE;
-                    fetch.r2_info.en = REG_DISABLE;
-                end
-                default: begin
-                    fetch.r1_info.en = REG_DISABLE;
-                    fetch.r2_info.en = REG_DISABLE;
-                end
-            endcase
-        end
-    end
-
-    always_comb begin : write_reg_info
-        if (rst == RST_ENABLE)
-            id_wreg_o = '{default:0};
-        else
-        case (opcode)
-            R_TYPE:
-                id_wreg_o = '{REG_ENABLE, rd};
-            I_ANDI,
-            I_ORI,
-            I_XORI,
-            I_LUI,
-            I_ADDIU:
-                id_wreg_o = '{REG_ENABLE, rt};
-            J_JAL:
-                id_wreg_o = '{REG_ENABLE, 5'b11111};
-            default: begin
-                id_wreg_o = '{default:0};
             end
-        endcase
-    end
-
-    always_comb begin : immediate_info
-        if (rst == RST_ENABLE)
-            immo = '0;
-        else
-        case (opcode)
-            R_TYPE: case (funct)
-                R_SLL,
-                R_SRL,
-                R_SRA:
-                    immo = {27'b0, shamt};
-                default:
-                    immo = '0;
-            endcase
-            I_ANDI,
-            I_ORI,
-            I_XORI,
-            I_ADDIU:
+            I_ANDI: begin
+                id_alu_o = '{RES_LOGIC, AND_OP};
+                id_wreg_o = '{REG_ENABLE, rt};
+                fetch.r1_info = '{REG_ENABLE, rs};
+                fetch.r2_info = '{default:0};
                 immo = immextu;
-            I_LUI:
+            end
+            I_ORI: begin
+                id_alu_o = '{RES_LOGIC, OR_OP};
+                id_wreg_o = '{REG_ENABLE, rt};
+                fetch.r1_info = '{REG_ENABLE, rs};
+                fetch.r2_info = '{default:0};
+                immo = immextu;
+            end
+            I_LUI: begin
+                id_alu_o = '{RES_LOGIC, OR_OP};
+                id_wreg_o = '{REG_ENABLE, rt};
+                fetch.r1_info = '{REG_ENABLE, rs};
+                fetch.r2_info = '{default:0};
                 immo = {immi, 16'b0};
-            J_JAL:
+            end
+            J_JAL: begin
+                id_alu_o = '{RES_LOGIC, OR_OP};
+                id_wreg_o = '{REG_ENABLE, 5'b11111};
+                fetch.r1_info = '{REG_ENABLE, 5'b00000};
+                fetch.r2_info = '{default:0};
                 immo = return_addr;
-            default:
+            end
+            I_XORI: begin
+                id_alu_o = '{RES_LOGIC, XOR_OP};
+                id_wreg_o = '{REG_ENABLE, rt};
+                fetch.r1_info = '{REG_ENABLE, rs};
+                fetch.r2_info = '{default:0};
+                immo = immextu;
+            end
+            I_ADDIU: begin
+                id_alu_o = '{RES_ARITH, ADD_OP};
+                id_wreg_o = '{REG_ENABLE, rt};
+                fetch.r1_info = '{REG_ENABLE, rs};
+                fetch.r2_info = '{default:0};
+                immo = immextu;
+            end
+            S_PREF: begin
+                id_alu_o = '{RES_NOP, NOP_OP};
+                id_wreg_o = '{default:0};
+                fetch.r1_info = '{default:0};
+                fetch.r2_info = '{default:0};
                 immo = '0;
-        endcase
-    end
-
-    always_comb begin: inst_valid_info
-        if (rst == RST_ENABLE)
-            instvalid = INVALID;
-        else
-        case (opcode)
-            default:
-                instvalid = VALID;
-        endcase
-    end
-
-    always_comb begin: jump_control
-        if (rst == RST_ENABLE)
-            id_jump_o = '{default:0};
-        else
-        case (opcode)
-            R_TYPE:
-                case (funct)
-                    J_JR:
-                        id_jump_o = '{JUMP_ENABLE, id_oprd1_o};
-                    default:
-                        id_jump_o = '{default:0};
-                endcase
+            end
             I_BEQ: begin
+                // id_alu_o = '{RES_JUMP, BEQ_OP};
+                id_wreg_o = '{default:0};
+                fetch.r1_info = '{REG_ENABLE, rs};
+                fetch.r2_info = '{REG_ENABLE, rt};
+                immo = '0;
                 if (id_oprd1_o == id_oprd2_o)
                     id_jump_o = '{JUMP_ENABLE, delayslot_addr + {immexts[29:0], 2'b00}};
-                else
-                    id_jump_o = '{default:0};
             end
             I_BNE: begin
+                id_wreg_o = '{default:0};
+                fetch.r1_info = '{REG_ENABLE, rs};
+                fetch.r2_info = '{REG_ENABLE, rt};
                 if (id_oprd1_o != id_oprd2_o)
                     id_jump_o = '{JUMP_ENABLE, delayslot_addr + {immexts[29:0], 2'b00}};
-                else
-                    id_jump_o = '{default:0};
-            end
-            I_BGTZ: begin
+            I_BGTZ:
+                id_wreg_o = '{default:0};
+                fetch.r1_info = '{REG_ENABLE, rs};
+                fetch.r2_info = '{REG_ENABLE, rt};
                 if (id_oprd1_o > 0)
                     id_jump_o = '{JUMP_ENABLE, delayslot_addr + {immexts[29:0], 2'b00}};
-                else
-                    id_jump_o = '{default:0};
             end
-            J_J,
-            J_JAL:
+            J_J: begin
+                id_wreg_o = '{default:0};
+                fetch.r1_info = '{REG_ENABLE, rs};
+                fetch.r2_info = '{REG_ENABLE, rt};
                 id_jump_o = '{JUMP_ENABLE, {delayslot_addr[31:28], id_inst_i.data[25:0], 2'b00}};
-            default:
-                id_jump_o = '{default:0};
+            end
+            J_JAL: begin
+                id_wreg_o = '{default:0};
+                fetch.r1_info = '{REG_ENABLE, rs};
+                fetch.r2_info = '{REG_ENABLE, rt};
+                id_jump_o = '{JUMP_ENABLE, {delayslot_addr[31:28], id_inst_i.data[25:0], 2'b00}};
+            end
+            default: begin
+                id_alu_o = '{default:0};
+                id_wreg_o = '{default:0};
+                fetch.r1_info = '{default:0};
+                fetch.r2_info = '{default:0};
+                immo = '0;
+            end
         endcase
     end
 

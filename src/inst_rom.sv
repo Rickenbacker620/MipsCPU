@@ -7,7 +7,7 @@ module inst_rom (
     inst_data_t inst_mem [0: 131071 - 1];
 
     initial
-        $readmemh("C:/Users/Admin/Desktop/openmips/mock/rom.data", inst_mem);
+        $readmemh("C:/Users/paras/Documents/Projects/MipsCPU/mock/rom.data", inst_mem);
 
     always_comb begin
         if (inst.en == CHIP_DISABLE) begin
