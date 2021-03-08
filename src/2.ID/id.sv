@@ -35,7 +35,7 @@ module id(
     assign shamt = id_inst_i.data[10:6];
 
     logic [15:0] immi;
-    logic [31:0] immexts, immextu, immo;
+    logic [31:0] immexts, immextu, immo, shamtext;
     assign immi = id_inst_i.data[15:0];
     assign immextu = {16'b0, immi};
     assign immexts = {{16{immi[15]}}, immi};
@@ -43,7 +43,7 @@ module id(
 
     valid_status_t instvalid;
 
-    always_comb begin : alu_info
+    always_comb begin
         if (rst == RST_ENABLE) begin
             id_alu_o = '{default:0};
             id_wreg_o = '{default:0};
@@ -122,10 +122,10 @@ module id(
                         immo = '0;
                     end
                     R_SRA: begin
-                        id_alu_o = '{RES_SHIFT, SRL_OP};
+                        id_alu_o = '{RES_SHIFT, SRA_OP};
                         id_wreg_o = '{REG_ENABLE, rd};
-                        fetch.r1_info = '{REG_ENABLE, rs};
-                        fetch.r2_info = '{default:0};
+                        fetch.r1_info = '{default:0};
+                        fetch.r2_info = '{REG_ENABLE, rt};
                         immo = shamtext;
                     end
                     R_SRAV: begin
@@ -242,9 +242,10 @@ module id(
                 immo = '0;
             end
         endcase
+        end
     end
 
-    always_comb begin: fill_reg_data
+    always_comb begin
         fill_reg(fetch.r1_info, fetch.r1_data, id_oprd1_o);
         fill_reg(fetch.r2_info, fetch.r2_data, id_oprd2_o);
     end
