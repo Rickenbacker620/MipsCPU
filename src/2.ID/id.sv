@@ -142,6 +142,58 @@ module id(
                         fetch.r2_info = '{REG_ENABLE, rt};
                         immo = '0;
                     end
+                    R_MFHI: begin
+                        id_alu_o = '{RES_MOVE, MFHI_OP};
+                        id_wreg_o = '{REG_ENABLE, 5'b00000};
+                        fetch.r1_info = '{default:0};
+                        fetch.r2_info = '{default:0};
+                        immo = '0;
+                    end
+                    R_MFLO: begin
+                        id_alu_o = '{RES_MOVE, MFLO_OP};
+                        id_wreg_o = '{REG_ENABLE, 5'b00000};
+                        fetch.r1_info = '{default:0};
+                        fetch.r2_info = '{default:0};
+                        immo = '0;
+                    end
+                    R_MTHI: begin
+                        id_alu_o = '{RES_MOVE, MTHI_OP};
+                        id_wreg_o = '{REG_ENABLE, 5'b00000};
+                        fetch.r1_info = '{REG_ENABLE, 5'b00000};
+                        fetch.r2_info = '{default:0};
+                        immo = '0;
+                    end
+                    R_MTLO: begin
+                        id_alu_o = '{RES_MOVE, MTLO_OP};
+                        id_wreg_o = '{REG_ENABLE, 5'b00000};
+                        fetch.r1_info = '{REG_ENABLE, 5'b00000};
+                        fetch.r2_info = '{default:0};
+                        immo = '0;
+                    end
+                    R_MOVN: begin
+                        id_alu_o = '{RES_MOVE, MOVN_OP};
+                        fetch.r1_info = '{REG_ENABLE, rs};
+                        fetch.r2_info = '{REG_ENABLE, rt};
+                        immo = '0;
+                        if (id_oprd2_o != 0) begin
+                            id_wreg_o = '{REG_ENABLE, 5'b00000};
+                        end
+                        else begin
+                            id_wreg_o = '{default:0};
+                        end
+                    end
+                    R_MOVZ: begin
+                        id_alu_o = '{RES_MOVE, MOVZ_OP};
+                        fetch.r1_info = '{REG_ENABLE, rs};
+                        fetch.r2_info = '{REG_ENABLE, rt};
+                        immo = '0;
+                        if (id_oprd2_o == 0) begin
+                            id_wreg_o = '{REG_ENABLE, 5'b00000};
+                        end
+                        else begin
+                            id_wreg_o = '{default:0};
+                        end
+                    end
                     default: begin
                         id_alu_o = '{default:0};
                         id_wreg_o = '{default:0};

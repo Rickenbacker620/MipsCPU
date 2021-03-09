@@ -48,20 +48,27 @@ package decode_table;
         R_SYNC = 6'b001111,
 
         R_ADDU = 6'b100001
+
+        R_MOVZ = 6'b001010
+        R_MOVN = 6'b001011
+        R_MFHI = 6'b010000
+        R_MTHI = 6'b010001
+        R_MFLO = 6'b010010
+        R_MTLO = 6'b010011
     } funct_t;
 
     typedef enum logic [2:0] {
         RES_LOGIC,
         RES_SHIFT,
         RES_ARITH,
-        RES_NOP
+        RES_NOP,
+        RES_MOVE
     } alu_sel_t;
 
     typedef enum logic [7:0] {
         OR_OP,
         AND_OP,
         XOR_OP,
-        NOP_OP,
         NOR_OP,
         LUI_OP,
 
@@ -69,7 +76,16 @@ package decode_table;
         SRL_OP,
         SRA_OP,
 
-        ADD_OP
+        ADD_OP,
+
+        NOP_OP,
+
+        MFHI_OP,
+        MFLO_OP,
+        MTHI_OP,
+        MTLO_OP,
+        MOVN_OP,
+        MOVZ_OP
     } alu_op_t;
 
     typedef struct {
