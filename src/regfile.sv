@@ -4,7 +4,7 @@ module regfile(
         input logic clk,
         input reset_status_t rst,
 
-        input reg_t wb_wreg_i,
+        input reg_t wb_wreg_o,
 
         i_fetch_rreg.slave read
     );
@@ -13,8 +13,8 @@ module regfile(
 
     always_ff @( posedge clk ) begin
         if (rst == RST_DISABLE) begin
-            if ((wb_wreg_i.en) && (wb_wreg_i.addr!= 5'h0)) begin
-                regs[wb_wreg_i.addr] <= wb_wreg_i.data;
+            if ((wb_wreg_o.en) && (wb_wreg_o.addr!= 5'h0)) begin
+                regs[wb_wreg_o.addr] <= wb_wreg_o.data;
             end
         end
     end
@@ -29,8 +29,8 @@ module regfile(
         else if (info.addr == 5'h0) begin
             data = '0;
         end
-        else if ((info.en == REG_ENABLE) && (wb_wreg_i.en == REG_ENABLE) && (info.addr == wb_wreg_i.addr)) begin
-            data = wb_wreg_i.data;
+        else if ((info.en == REG_ENABLE) && (wb_wreg_o.en == REG_ENABLE) && (info.addr == wb_wreg_o.addr)) begin
+            data = wb_wreg_o.data;
         end
         else if (info.en == REG_ENABLE) begin
             data = regs[info.addr];

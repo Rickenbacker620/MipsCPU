@@ -36,24 +36,17 @@ package decode_table;
         R_SRLV = 6'b000110,
         R_SRAV = 6'b000111,
 
-        R_MOVN = 6'b001011,
-        R_MOVZ = 6'b001010,
-        R_MFHI = 6'b010000,
-        R_MTHI = 6'b010001,
-        R_MFLO = 6'b010010,
-        R_MTLO = 6'b010011,
-
         R_JR = 6'b001000,
 
         R_SYNC = 6'b001111,
 
-        R_ADDU = 6'b100001
+        R_ADDU = 6'b100001,
 
-        R_MOVZ = 6'b001010
-        R_MOVN = 6'b001011
-        R_MFHI = 6'b010000
-        R_MTHI = 6'b010001
-        R_MFLO = 6'b010010
+        R_MOVZ = 6'b001010,
+        R_MOVN = 6'b001011,
+        R_MFHI = 6'b010000,
+        R_MTHI = 6'b010001,
+        R_MFLO = 6'b010010,
         R_MTLO = 6'b010011
     } funct_t;
 

@@ -31,11 +31,18 @@ module openmips(
     reg_data_t ex_oprd2_i;
     reg_info_t ex_wreg_i;
 
+    hilo_t ex_hilo_o;
     reg_t ex_wreg_o;
     reg_t mem_wreg_i;
+    hilo_t mem_hilo_i;
 
+    hilo_t mem_hilo_o;
     reg_t mem_wreg_o;
-    reg_t wb_wreg_i;
+    reg_t wb_wreg_o;
+    hilo_t wb_hilo_o;
+
+    reg_data_t hilo_hi_o;
+    reg_data_t hilo_lo_o;
 
 
     regfile regfile1(.*, .read(fetch_rreg.slave));
@@ -55,5 +62,7 @@ module openmips(
     mem mem0(.*);
 
     mem_wb mem_wb0(.*);
+
+    hi_lo hi_lo0(.*);
 
 endmodule
