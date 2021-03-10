@@ -65,7 +65,7 @@ module ex(
         end
         else if (mem_hilo_o.en == REG_ENABLE) begin
             HI = mem_hilo_o.hi;
-            LO = mem_hilo_o.hi;
+            LO = mem_hilo_o.lo;
         end
         else if (wb_hilo_o.en == REG_ENABLE) begin
             HI = wb_hilo_o.hi;
