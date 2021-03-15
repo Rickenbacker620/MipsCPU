@@ -4,6 +4,8 @@ module pc(
     input logic clk,
     input reset_status_t rst,
 
+    input logic [5:0] stall,
+
     input jump_t id_jump_o,
 
     i_fetch_inst.master fetch,
@@ -21,7 +23,7 @@ module pc(
     always_ff @(posedge clk) begin
         if (fetch.en == CHIP_DISABLE)
             fetch.addr <= '0;
-        else begin
+        else if (stall[0] == 1'b0) begin
             if (id_jump_o.en == JUMP_ENABLE)
                 fetch.addr <= id_jump_o.addr;
             else

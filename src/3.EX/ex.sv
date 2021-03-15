@@ -15,8 +15,13 @@ module ex(
         input hilo_t mem_hilo_o,
         input hilo_t wb_hilo_o,
 
+        input inst_addr_t ex_link_addr_i,
+
         output reg_t ex_wreg_o,
-        output hilo_t ex_hilo_o
+        output hilo_t ex_hilo_o,
+
+        output logic stallreq_from_ex
+
     );
 
     reg_data_t logicres;
@@ -101,6 +106,7 @@ module ex(
             RES_SHIFT: ex_wreg_o.data = shiftres;
             RES_ARITH: ex_wreg_o.data = arithres;
             RES_MOVE: ex_wreg_o.data = moveres;
+            RES_JUMP: ex_wreg_o.data = ex_link_addr_i;
             default: ex_wreg_o.data = '0;
         endcase
     end

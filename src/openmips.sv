@@ -44,6 +44,17 @@ module openmips(
     reg_data_t hilo_hi_o;
     reg_data_t hilo_lo_o;
 
+    logic [5:0] stall;
+    logic id_in_delayslot_i;
+    logic ex_now_in_delayslot_i;
+    logic stallreq_from_ex;
+    logic stallreq_from_id;
+    inst_addr_t ex_link_addr_i;
+    logic id_next_in_delayslot_o;
+logic id_now_in_delayslot_o;
+inst_addr_t id_link_addr_o;
+
+
 
     regfile regfile1(.*, .read(fetch_rreg.slave));
 
@@ -64,5 +75,7 @@ module openmips(
     mem_wb mem_wb0(.*);
 
     hi_lo hi_lo0(.*);
+
+    ctrl ctrl0(.*);
 
 endmodule

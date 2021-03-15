@@ -10,12 +10,22 @@ module id(
         input reg_t ex_wreg_o,
         input reg_t mem_wreg_o,
 
-        output jump_t id_jump_o,
+        input logic id_in_delayslot_i,
 
         output alu_t id_alu_o,
         output reg_data_t id_oprd1_o,
         output reg_data_t id_oprd2_o,
-        output reg_info_t id_wreg_o
+        output reg_info_t id_wreg_o,
+
+        output jump_t id_jump_o,
+
+        output logic stallreq_from_id,
+
+        output logic id_next_in_delayslot_o,
+
+        output logic id_now_in_delayslot_o,
+
+        output inst_addr_t id_link_addr_o
     );
 
     opcode_t opcode;
@@ -54,13 +64,14 @@ module id(
         else begin
             instvalid = VALID;
             id_jump_o = '{default:0};
+            id_link_addr_o = '0;
         case (opcode)
             R_TYPE: begin
                 case (funct)
                     J_JR: begin
                         id_alu_o = '{default:0};
                         id_wreg_o = '{default:0};
-                        fetch.r1_info = '{default:0};
+                        fetch.r1_info = '{REG_ENABLE, rs};
                         fetch.r2_info = '{default:0};
                         immo = '0;
                         id_jump_o = '{JUMP_ENABLE, id_oprd1_o};
@@ -224,13 +235,6 @@ module id(
                 fetch.r2_info = '{default:0};
                 immo = {immi, 16'b0};
             end
-            J_JAL: begin
-                id_alu_o = '{RES_LOGIC, OR_OP};
-                id_wreg_o = '{REG_ENABLE, 5'b11111};
-                fetch.r1_info = '{REG_ENABLE, 5'b00000};
-                fetch.r2_info = '{default:0};
-                immo = return_addr;
-            end
             I_XORI: begin
                 id_alu_o = '{RES_LOGIC, XOR_OP};
                 id_wreg_o = '{REG_ENABLE, rt};
@@ -253,7 +257,7 @@ module id(
                 immo = '0;
             end
             I_BEQ: begin
-                // id_alu_o = '{RES_JUMP, BEQ_OP};
+                id_alu_o = '{RES_JUMP, BEQ_OP};
                 id_wreg_o = '{default:0};
                 fetch.r1_info = '{REG_ENABLE, rs};
                 fetch.r2_info = '{REG_ENABLE, rt};
@@ -267,7 +271,8 @@ module id(
                 fetch.r2_info = '{REG_ENABLE, rt};
                 if (id_oprd1_o != id_oprd2_o)
                     id_jump_o = '{JUMP_ENABLE, delayslot_addr + {immexts[29:0], 2'b00}};
-            I_BGTZ:
+            end
+            I_BGTZ: begin
                 id_wreg_o = '{default:0};
                 fetch.r1_info = '{REG_ENABLE, rs};
                 fetch.r2_info = '{REG_ENABLE, rt};
@@ -281,9 +286,11 @@ module id(
                 id_jump_o = '{JUMP_ENABLE, {delayslot_addr[31:28], id_inst_i.data[25:0], 2'b00}};
             end
             J_JAL: begin
-                id_wreg_o = '{default:0};
-                fetch.r1_info = '{REG_ENABLE, rs};
-                fetch.r2_info = '{REG_ENABLE, rt};
+                id_alu_o = '{RES_JUMP, JAL_OP};
+                id_wreg_o = '{REG_ENABLE, 5'b11111};
+                fetch.r1_info = '{default:0};
+                fetch.r2_info = '{default:0};
+                id_link_addr_o = return_addr;
                 id_jump_o = '{JUMP_ENABLE, {delayslot_addr[31:28], id_inst_i.data[25:0], 2'b00}};
             end
             default: begin
