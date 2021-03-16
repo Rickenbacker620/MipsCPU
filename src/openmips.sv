@@ -17,6 +17,8 @@ module openmips(
 
     i_fetch_inst fetch_inst();
 
+    i_membus membus();
+
     jump_t id_jump_o;
 
     inst_t if_inst_o;
@@ -55,6 +57,17 @@ logic id_now_in_delayslot_o;
 inst_addr_t id_link_addr_o;
 
 
+        ram_addr_t ex_ramaddr_o;
+        ram_addr_t ex_ramaddr_i;
+
+        ram_addr_t mem_ramaddr_i;
+
+        alu_t ex_alu_o;
+        alu_t mem_alu_i;
+
+
+
+
 
     regfile regfile1(.*, .read(fetch_rreg.slave));
 
@@ -70,12 +83,14 @@ inst_addr_t id_link_addr_o;
 
     ex_mem ex_mem0(.*);
 
-    mem mem0(.*);
+    mem mem0(.*, .ram(membus.master));
 
     mem_wb mem_wb0(.*);
 
     hi_lo hi_lo0(.*);
 
     ctrl ctrl0(.*);
+
+    data_ram data_ram0(.*, .ram(membus.slave));
 
 endmodule

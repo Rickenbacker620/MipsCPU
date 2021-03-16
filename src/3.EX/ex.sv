@@ -71,11 +71,11 @@ module ex(
             ex_alu_i = ex_alu_o;
         end
         else case (ex_alu_i.op)
-                LB_OP: ex_ramaddr_o = ex_oprd1_i + ex_oprd2_o;
-                LW_OP: ex_ramaddr_o = ex_oprd1_i + ex_oprd2_o;
-                SB_OP: ex_ramaddr_o = ex_oprd1_i + ex_oprd2_o;
-                SW_OP: ex_ramaddr_o = ex_oprd1_i + ex_oprd2_o;
-                default: ex_ramaddr_o = 0';
+                LB_OP: ex_ramaddr_o = ex_oprd1_i + ex_oprd2_i;
+                LW_OP: ex_ramaddr_o = ex_oprd1_i + ex_oprd2_i;
+                SB_OP: ex_ramaddr_o = ex_oprd1_i + ex_oprd2_i;
+                SW_OP: ex_ramaddr_o = ex_oprd1_i + ex_oprd2_i;
+                default: ex_ramaddr_o = '0;
             endcase
     end
 

@@ -20,7 +20,13 @@ package decode_table;
         J_JR = 6'b001000,
         J_JAL = 6'b000011,
 
-        S_PREF = 6'b110011
+        S_PREF = 6'b110011,
+
+        I_LB = 6'b100000,
+        I_LW = 6'b100011,
+
+        I_SB = 6'b101000,
+        I_SW = 6'b101011
      } opcode_t;
 
     typedef enum logic [5:0] {

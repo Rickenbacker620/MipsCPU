@@ -1,5 +1,24 @@
 import project_types::*;
 
+interface i_membus;
+    logic we;
+    chip_en_t ce;
+    ram_addr_t addr;
+    ram_data_t write;
+    ram_data_t read;
+
+    modport master (
+        input read,
+        output we, ce, addr, write
+    );
+
+    modport slave (
+        input we, ce, addr, write,
+        output read
+    );
+endinterface //i_membus
+
+
 interface i_fetch_inst;
     chip_en_t en;
     inst_addr_t addr;
