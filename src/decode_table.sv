@@ -56,7 +56,8 @@ package decode_table;
         RES_ARITH,
         RES_NOP,
         RES_MOVE,
-        RES_JUMP
+        RES_JUMP,
+        RES_LOAD_STORE
     } alu_sel_t;
 
     typedef enum logic [7:0] {
@@ -82,7 +83,12 @@ package decode_table;
         MOVZ_OP,
 
         JAL_OP,
-        BEQ_OP
+        BEQ_OP,
+
+        LW_OP,
+        LB_OP,
+        SB_OP,
+        SW_OP
     } alu_op_t;
 
     typedef struct {

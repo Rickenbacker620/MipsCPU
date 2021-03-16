@@ -65,4 +65,7 @@ package project_types;
         jump_status_t en;
         inst_addr_t addr;
     } jump_t;
+
+    typedef logic [31:0] ram_addr_t;
+    typedef logic [31:0] ram_data_t;
 endpackage
