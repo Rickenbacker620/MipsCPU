@@ -5,6 +5,8 @@ module mem(
 
         input reg_t mem_wreg_i,
         input hilo_t mem_hilo_i,
+        input ram_addr_t mem_ramaddr_i,
+        input alu_t mem_alu_i,
 
         output reg_t mem_wreg_o,
         output hilo_t mem_hilo_o
@@ -18,6 +20,14 @@ module mem(
         else begin
             mem_wreg_o = mem_wreg_i;
             mem_hilo_o = mem_hilo_i;
+
+            ////////////////////////////////////
+
+            if (mem_alu_i.op == LW_OP) begin
+                mem_wreg_o =
+            end
+
+
         end
     end
 

@@ -19,9 +19,11 @@ module ex(
 
         output reg_t ex_wreg_o,
         output hilo_t ex_hilo_o,
+        output alu_t ex_alu_o,
 
-        output logic stallreq_from_ex
+        output logic stallreq_from_ex,
 
+        output ram_addr_t ex_ramaddr_o
     );
 
     reg_data_t logicres;
@@ -62,6 +64,20 @@ module ex(
                 default: arithres = '0;
             endcase
         end
+
+    always_comb begin : load_store_operation
+        if (rst == RST_ENABLE) begin
+            ex_ramaddr_o = '0;
+            ex_alu_i = ex_alu_o;
+        end
+        else case (ex_alu_i.op)
+                LB_OP: ex_ramaddr_o = ex_oprd1_i + ex_oprd2_o;
+                LW_OP: ex_ramaddr_o = ex_oprd1_i + ex_oprd2_o;
+                SB_OP: ex_ramaddr_o = ex_oprd1_i + ex_oprd2_o;
+                SW_OP: ex_ramaddr_o = ex_oprd1_i + ex_oprd2_o;
+                default: ex_ramaddr_o = 0';
+            endcase
+    end
 
     always_comb begin : HILO_operation
         if (rst == RST_ENABLE) begin

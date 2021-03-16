@@ -215,18 +215,18 @@ module id(
                 endcase
             end
             I_LB: begin
-                id_alu_o = '{RES_LOAD_STORE, AND_OP};
+                id_alu_o = '{RES_LOAD_STORE, LB_OP};
                 id_wreg_o = '{REG_ENABLE, rt};
                 fetch.r1_info = '{REG_ENABLE, rs};
                 fetch.r2_info = '{default:0};
-                immo = immextu;
+                immo = immexts;
             end
             I_LW: begin
-                id_alu_o = '{RES_LOGIC, AND_OP};
+                id_alu_o = '{RES_LOAD_STORE, LW_OP};
                 id_wreg_o = '{REG_ENABLE, rt};
                 fetch.r1_info = '{REG_ENABLE, rs};
                 fetch.r2_info = '{default:0};
-                immo = immextu;
+                immo = immexts;
             end
             I_ANDI: begin
                 id_alu_o = '{RES_LOGIC, AND_OP};
