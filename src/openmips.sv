@@ -4,14 +4,12 @@ module openmips(
     input logic clk,
     input reset_status_t rst,
 
-    input inst_t rom_data
-
     output chip_status_t rom_ce,
-    output pc_t rom_addr,
+    output pc_t rom_addr
+    input inst_t rom_data,
 );
 
     i_regbus regbus();
-
     i_membus membus();
 
     jump_t id_jumpreq;
@@ -20,7 +18,6 @@ module openmips(
     inst_t id_inst_i;
 
     pc_t if_pc_o;
-
     pc_t id_pc_i;
 
 
@@ -63,7 +60,6 @@ module openmips(
 
     assign rom_ce = if_ce_o;
     assign rom_addr = if_pc_o;
-
     assign rom_inst_o = rom_data;
 
     regfile regfile1(.*, .read(regbus.slave));
