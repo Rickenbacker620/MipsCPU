@@ -14,7 +14,7 @@ module ex(
         output reg_t ex_wreg_o,
         output alu_t ex_alu_o,
 
-        output logic stallreq_from_ex,
+        output logic ex_stallreq,
 
         output ram_addr_t ex_ramaddr_o
     );

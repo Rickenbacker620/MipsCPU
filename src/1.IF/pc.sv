@@ -6,7 +6,7 @@ module pc(
 
     input logic [5:0] stall,
 
-    input jump_t id_jump_o,
+    input jump_t id_jumpreq,
 
     i_instbus.master rom,
 
@@ -24,8 +24,8 @@ module pc(
         if (rom.ce == CHIP_DISABLE)
             rom.addr <= '0;
         else if (stall[0] == 1'b0) begin
-            if (id_jump_o.en == JUMP_ENABLE)
-                rom.addr <= id_jump_o.addr;
+            if (id_jumpreq.en == JUMP_ENABLE)
+                rom.addr <= id_jumpreq.addr;
             else
                 rom.addr <= rom.addr + 4'h4;
         end

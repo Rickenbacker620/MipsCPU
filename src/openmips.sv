@@ -19,7 +19,7 @@ module openmips(
 
     i_membus membus();
 
-    jump_t id_jump_o;
+    jump_t id_jumpreq;
 
     inst_t if_inst_o;
     inst_t id_inst_i;
@@ -42,8 +42,8 @@ module openmips(
     logic [5:0] stall;
     logic id_in_delayslot_i;
     logic ex_now_in_delayslot_i;
-    logic stallreq_from_ex;
-    logic stallreq_from_id;
+    logic ex_stallreq;
+    logic id_stallreq;
     inst_addr_t ex_link_addr_i;
     logic id_next_in_delayslot_o;
 
