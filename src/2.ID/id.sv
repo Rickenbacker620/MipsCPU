@@ -6,6 +6,7 @@ module id(
 
         i_regbus.master read,
 
+        input pc_t id_pc_i,
         input inst_t id_inst_i,
         input reg_t ex_wreg_o,
         input reg_t mem_wreg_o,
@@ -25,28 +26,28 @@ module id(
 
         output logic id_now_in_delayslot_o,
 
-        output inst_addr_t id_link_addr_o
+        output pc_t id_link_addr_o
     );
 
     opcode_t opcode;
     funct_t funct;
-    assign opcode = opcode_t'(id_inst_i.data[31:26]);
-    assign funct = funct_t'(id_inst_i.data[5:0]);
+    assign opcode = opcode_t'(id_inst_i[31:26]);
+    assign funct = funct_t'(id_inst_i[5:0]);
 
-    inst_addr_t delayslot_addr;
-    inst_addr_t return_addr;
-    assign delayslot_addr = id_inst_i.addr + 32'h0000_0004;
-    assign return_addr = id_inst_i.addr + 32'h0000_0008;
+    pc_t delayslot_addr;
+    pc_t return_addr;
+    assign delayslot_addr = id_pc_i + 32'h0000_0004;
+    assign return_addr = id_pc_i + 32'h0000_0008;
 
     inst_5bit_t rs, rt, rd, shamt;
-    assign rs = id_inst_i.data[25:21];
-    assign rt = id_inst_i.data[20:16];
-    assign rd = id_inst_i.data[15:11];
-    assign shamt = id_inst_i.data[10:6];
+    assign rs = id_inst_i[25:21];
+    assign rt = id_inst_i[20:16];
+    assign rd = id_inst_i[15:11];
+    assign shamt = id_inst_i[10:6];
 
     logic [15:0] immi;
     logic [31:0] immexts, immextu, immo, shamtext;
-    assign immi = id_inst_i.data[15:0];
+    assign immi = id_inst_i[15:0];
     assign immextu = {16'b0, immi};
     assign immexts = {{16{immi[15]}}, immi};
     assign shamtext = {27'b0, shamt};
@@ -196,7 +197,7 @@ module id(
                 id_wreg_o = '{default:0};
                 read.r1_info = '{REG_ENABLE, rs};
                 read.r2_info = '{REG_ENABLE, rt};
-                id_jumpreq = '{JUMP_ENABLE, {delayslot_addr[31:28], id_inst_i.data[25:0], 2'b00}};
+                id_jumpreq = '{JUMP_ENABLE, {delayslot_addr[31:28], id_inst_i[25:0], 2'b00}};
             end
             J_JAL: begin
                 id_alu_o = '{RES_JUMP, JAL_OP};
@@ -204,7 +205,7 @@ module id(
                 read.r1_info = '{default:0};
                 read.r2_info = '{default:0};
                 id_link_addr_o = return_addr;
-                id_jumpreq = '{JUMP_ENABLE, {delayslot_addr[31:28], id_inst_i.data[25:0], 2'b00}};
+                id_jumpreq = '{JUMP_ENABLE, {delayslot_addr[31:28], id_inst_i[25:0], 2'b00}};
             end
             default: begin
                 id_alu_o = '{default:0};

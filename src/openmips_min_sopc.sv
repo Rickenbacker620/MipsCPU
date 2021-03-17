@@ -5,15 +5,25 @@ module openmips_min_sopc (
     input reset_status_t rst
 );
 
-  i_instbus fetch_out ();
+chip_status_t ce;
+pc_t pc;
+inst_t inst;
 
   openmips openmips0 (
       .clk(clk),
       .rst(rst),
 
-      .fetch_interface(fetch_out.master)
+     .rom_ce(ce),
+     .rom_addr(pc),
+
+     .rom_data(inst)
   );
 
-  inst_rom inst_rom0 (.rom(fetch_out.slave));
+  inst_rom inst_rom0 (
+     .ce(ce),
+     .pc(pc),
+
+     .inst(inst)
+  );
 
 endmodule

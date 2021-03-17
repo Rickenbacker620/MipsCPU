@@ -14,7 +14,7 @@ module id_ex (
 
         output logic ex_now_in_delayslot_i,
 
-        input inst_addr_t id_link_addr_o,
+        input pc_t id_link_addr_o,
 
         output alu_t ex_alu_i,
         output reg_data_t ex_oprd1_i,
@@ -23,7 +23,7 @@ module id_ex (
 
         output logic id_in_delayslot_i,
 
-        output inst_addr_t ex_link_addr_i
+        output pc_t ex_link_addr_i
     );
 
     always_ff @(posedge clk) begin

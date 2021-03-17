@@ -14,20 +14,10 @@ package project_types;
     typedef enum logic {
         CHIP_ENABLE = 1'b1,
         CHIP_DISABLE = 1'b0
-    } chip_en_t;
+    } chip_status_t;
 
-    typedef logic [31:0] inst_addr_t;
-    typedef logic [31:0] inst_data_t;
-
-    typedef struct {
-        chip_en_t en;
-        inst_addr_t addr;
-    } inst_info_t;
-
-    typedef struct {
-        inst_addr_t addr;
-        inst_data_t data;
-    } inst_t;
+    typedef logic [31:0] pc_t;
+    typedef logic [31:0] inst_t;
 
     //register types
     typedef enum logic {
@@ -57,7 +47,7 @@ package project_types;
 
     typedef struct {
         jump_status_t en;
-        inst_addr_t addr;
+        pc_t addr;
     } jump_t;
 
     typedef logic [31:0] ram_addr_t;

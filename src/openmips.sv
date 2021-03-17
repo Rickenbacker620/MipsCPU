@@ -1,28 +1,37 @@
 import project_types::*;
 
 module openmips(
-        input logic clk,
-        input reset_status_t rst,
+    input logic clk,
+    input reset_status_t rst,
 
-        i_instbus.master fetch_interface
-    );
+    output chip_status_t rom_ce,
+    output pc_t rom_addr,
 
-    always_comb begin
-        fetch_interface.ce <= fetch_inst.ce;
-        fetch_interface.addr <= fetch_inst.addr;
-        fetch_inst.data <= fetch_interface.data;
-    end
+    input inst_t rom_data
+);
+
+    // always_comb begin
+    //     fetch_interface.ce <= fetch_inst.ce;
+    //     fetch_interface.addr <= fetch_inst.addr;
+    //     fetch_inst.data <= fetch_interface.data;
+    // end
 
     i_regbus fetch_rreg();
-
-    i_instbus fetch_inst();
 
     i_membus membus();
 
     jump_t id_jumpreq;
 
-    inst_t if_inst_o;
+    inst_t rom_inst_o;
     inst_t id_inst_i;
+
+    pc_t if_pc_o;
+
+    pc_t id_pc_i;
+
+
+    chip_status_t if_ce_o;
+
 
     alu_t id_alu_o;
     reg_data_t id_oprd1_o;
@@ -44,11 +53,11 @@ module openmips(
     logic ex_now_in_delayslot_i;
     logic ex_stallreq;
     logic id_stallreq;
-    inst_addr_t ex_link_addr_i;
+    pc_t ex_link_addr_i;
     logic id_next_in_delayslot_o;
 
     logic id_now_in_delayslot_o;
-    inst_addr_t id_link_addr_o;
+    pc_t id_link_addr_o;
 
     ram_addr_t ex_ramaddr_o;
     ram_addr_t ex_ramaddr_i;
@@ -58,13 +67,14 @@ module openmips(
     alu_t ex_alu_o;
     alu_t mem_alu_i;
 
+    assign rom_ce = if_ce_o;
+    assign rom_addr = if_pc_o;
 
-
-
+    assign rom_inst_o = rom_data;
 
     regfile regfile1(.*, .read(fetch_rreg.slave));
 
-    pc pc0(.*, .rom(fetch_inst.master));
+    pc pc0(.*);
 
     if_id if_id0(.*);
 

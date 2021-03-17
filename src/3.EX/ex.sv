@@ -9,7 +9,7 @@ module ex(
         input reg_data_t ex_oprd2_i,
         input reg_info_t ex_wreg_i,
 
-        input inst_addr_t ex_link_addr_i,
+        input pc_t ex_link_addr_i,
 
         output reg_t ex_wreg_o,
         output alu_t ex_alu_o,
