@@ -20,18 +20,18 @@ endinterface //i_membus
 
 
 interface i_instbus;
-    chip_en_t en;
+    chip_en_t ce;
     inst_addr_t addr;
     inst_data_t data;
 
     modport master (
-            output en, addr,
+            output ce, addr,
             input data
         );
 
     modport slave (
             output data,
-            input en, addr
+            input ce, addr
         );
 endinterface
 

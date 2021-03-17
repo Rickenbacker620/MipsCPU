@@ -5,7 +5,7 @@ module openmips_min_sopc (
     input reset_status_t rst
 );
 
-  i_fetch_inst fetch_out ();
+  i_instbus fetch_out ();
 
   openmips openmips0 (
       .clk(clk),

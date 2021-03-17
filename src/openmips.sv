@@ -4,11 +4,11 @@ module openmips(
         input logic clk,
         input reset_status_t rst,
 
-        i_fetch_inst.master fetch_interface
+        i_instbus.master fetch_interface
     );
 
     always_comb begin
-        fetch_interface.en <= fetch_inst.en;
+        fetch_interface.ce <= fetch_inst.ce;
         fetch_interface.addr <= fetch_inst.addr;
         fetch_inst.data <= fetch_interface.data;
     end

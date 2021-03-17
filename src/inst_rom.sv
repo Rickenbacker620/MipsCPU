@@ -1,7 +1,7 @@
 import project_types::*;
 
 module inst_rom (
-        i_fetch_inst.slave rom
+        i_instbus.slave rom
     );
 
     inst_data_t inst_mem [0: 131071 - 1];
@@ -10,7 +10,7 @@ module inst_rom (
         $readmemh("C:/Users/paras/Documents/Projects/MipsCPU/mock/rom.data", inst_mem);
 
     always_comb begin
-        if (rom.en == CHIP_DISABLE) begin
+        if (rom.ce == CHIP_DISABLE) begin
             rom.data = '0;
         end
         else begin

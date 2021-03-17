@@ -15,13 +15,13 @@ module pc(
 
     always_ff @(posedge clk) begin
         if (rst == RST_ENABLE)
-            rom.en <= CHIP_DISABLE;
+            rom.ce <= CHIP_DISABLE;
         else
-            rom.en <= CHIP_ENABLE;
+            rom.ce <= CHIP_ENABLE;
     end
 
     always_ff @(posedge clk) begin
-        if (rom.en == CHIP_DISABLE)
+        if (rom.ce == CHIP_DISABLE)
             rom.addr <= '0;
         else if (stall[0] == 1'b0) begin
             if (id_jump_o.en == JUMP_ENABLE)
