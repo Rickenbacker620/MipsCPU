@@ -19,7 +19,7 @@ interface i_membus;
 endinterface //i_membus
 
 
-interface i_fetch_inst;
+interface i_instbus;
     chip_en_t en;
     inst_addr_t addr;
     inst_data_t data;
@@ -35,7 +35,7 @@ interface i_fetch_inst;
         );
 endinterface
 
-interface i_fetch_rreg;
+interface i_regbus;
     reg_info_t r1_info;
     reg_info_t r2_info;
     reg_data_t r1_data;

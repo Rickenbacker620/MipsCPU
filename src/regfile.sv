@@ -6,7 +6,7 @@ module regfile(
 
         input reg_t wb_wreg_o,
 
-        i_fetch_rreg.slave read
+        i_regbus.slave read
     );
 
     reg_data_t regs[0: 31];

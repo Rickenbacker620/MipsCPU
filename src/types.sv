@@ -49,12 +49,6 @@ package project_types;
         reg_data_t data;
     } reg_t;
 
-    typedef struct {
-        reg_en_t en;
-        reg_data_t hi;
-        reg_data_t lo;
-    } hilo_t;
-
     //control types
     typedef enum logic {
         JUMP_ENABLE = 1'b1,

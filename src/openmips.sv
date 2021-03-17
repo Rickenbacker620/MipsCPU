@@ -13,9 +13,9 @@ module openmips(
         fetch_inst.data <= fetch_interface.data;
     end
 
-    i_fetch_rreg fetch_rreg();
+    i_regbus fetch_rreg();
 
-    i_fetch_inst fetch_inst();
+    i_instbus fetch_inst();
 
     i_membus membus();
 
@@ -33,18 +33,11 @@ module openmips(
     reg_data_t ex_oprd2_i;
     reg_info_t ex_wreg_i;
 
-    hilo_t ex_hilo_o;
     reg_t ex_wreg_o;
     reg_t mem_wreg_i;
-    hilo_t mem_hilo_i;
 
-    hilo_t mem_hilo_o;
     reg_t mem_wreg_o;
     reg_t wb_wreg_o;
-    hilo_t wb_hilo_o;
-
-    reg_data_t hilo_hi_o;
-    reg_data_t hilo_lo_o;
 
     logic [5:0] stall;
     logic id_in_delayslot_i;
@@ -53,17 +46,17 @@ module openmips(
     logic stallreq_from_id;
     inst_addr_t ex_link_addr_i;
     logic id_next_in_delayslot_o;
-logic id_now_in_delayslot_o;
-inst_addr_t id_link_addr_o;
 
+    logic id_now_in_delayslot_o;
+    inst_addr_t id_link_addr_o;
 
-        ram_addr_t ex_ramaddr_o;
-        ram_addr_t ex_ramaddr_i;
+    ram_addr_t ex_ramaddr_o;
+    ram_addr_t ex_ramaddr_i;
 
-        ram_addr_t mem_ramaddr_i;
+    ram_addr_t mem_ramaddr_i;
 
-        alu_t ex_alu_o;
-        alu_t mem_alu_i;
+    alu_t ex_alu_o;
+    alu_t mem_alu_i;
 
 
 
@@ -71,11 +64,11 @@ inst_addr_t id_link_addr_o;
 
     regfile regfile1(.*, .read(fetch_rreg.slave));
 
-    pc pc0(.*, .fetch(fetch_inst.master));
+    pc pc0(.*, .rom(fetch_inst.master));
 
     if_id if_id0(.*);
 
-    id id0(.*, .fetch(fetch_rreg.master));
+    id id0(.*, .read(fetch_rreg.master));
 
     id_ex id_ex0(.*);
 
@@ -86,8 +79,6 @@ inst_addr_t id_link_addr_o;
     mem mem0(.*, .ram(membus.master));
 
     mem_wb mem_wb0(.*);
-
-    hi_lo hi_lo0(.*);
 
     ctrl ctrl0(.*);
 

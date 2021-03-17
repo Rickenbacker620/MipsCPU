@@ -14,6 +14,6 @@ module openmips_min_sopc (
       .fetch_interface(fetch_out.master)
   );
 
-  inst_rom inst_rom0 (.inst(fetch_out.slave));
+  inst_rom inst_rom0 (.rom(fetch_out.slave));
 
 endmodule
