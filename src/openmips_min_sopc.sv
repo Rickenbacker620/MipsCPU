@@ -11,7 +11,6 @@ module openmips_min_sopc (
 
     openmips openmips0 (
         .*,
-
         .rom_ce(ce),
         .rom_addr(pc),
         .rom_data(inst)

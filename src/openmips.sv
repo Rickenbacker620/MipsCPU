@@ -7,6 +7,13 @@ module openmips(
     output chip_status_t rom_ce,
     output pc_t rom_addr
     input inst_t rom_data,
+
+    output chip_status_t ram_ce_o,
+    output logic ram_we_o,
+    output logic[3:0] ram_sel_o,
+    output ram_addr_t ram_addr_o,
+    output ram_data_t ram_data_o,
+    input ram_data_t ram_data_i
 );
 
     i_regbus regbus();
@@ -76,7 +83,10 @@ module openmips(
 
     ex_mem ex_mem0(.*);
 
-    mem mem0(.*, .ram(membus.master));
+    mem mem0(
+        .*,
+        .ram(membus.master)
+    );
 
     mem_wb mem_wb0(.*);
 

@@ -1,23 +1,5 @@
 import project_types::*;
 
-interface i_membus;
-    logic we;
-    chip_status_t ce;
-    ram_addr_t addr;
-    ram_data_t write;
-    ram_data_t read;
-
-    modport master (
-        input read,
-        output we, ce, addr, write
-    );
-
-    modport slave (
-        input we, ce, addr, write,
-        output read
-    );
-endinterface //i_membus
-
 
 interface i_regbus;
     reg_info_t r1_info;
