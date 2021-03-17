@@ -4,19 +4,13 @@ module openmips(
     input logic clk,
     input reset_status_t rst,
 
+    input inst_t rom_data
+
     output chip_status_t rom_ce,
     output pc_t rom_addr,
-
-    input inst_t rom_data
 );
 
-    // always_comb begin
-    //     fetch_interface.ce <= fetch_inst.ce;
-    //     fetch_interface.addr <= fetch_inst.addr;
-    //     fetch_inst.data <= fetch_interface.data;
-    // end
-
-    i_regbus fetch_rreg();
+    i_regbus regbus();
 
     i_membus membus();
 
@@ -72,13 +66,13 @@ module openmips(
 
     assign rom_inst_o = rom_data;
 
-    regfile regfile1(.*, .read(fetch_rreg.slave));
+    regfile regfile1(.*, .read(regbus.slave));
 
     pc pc0(.*);
 
     if_id if_id0(.*);
 
-    id id0(.*, .read(fetch_rreg.master));
+    id id0(.*, .read(regbus.master));
 
     id_ex id_ex0(.*);
 
