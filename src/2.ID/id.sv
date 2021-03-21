@@ -6,12 +6,11 @@ module id(
 
         i_regbus.master read,
 
-        input pc_t id_pc_i,
+        input inst_addr_t id_pc_i,
         input inst_t id_inst_i,
         input reg_t ex_wreg_o,
         input reg_t mem_wreg_o,
 
-        input logic id_in_delayslot_i,
 
         output alu_t id_alu_o,
         output reg_data_t id_oprd1_o,
@@ -22,11 +21,7 @@ module id(
 
         output logic id_stallreq,
 
-        output logic id_next_in_delayslot_o,
-
-        output logic id_now_in_delayslot_o,
-
-        output pc_t id_link_addr_o
+        output inst_addr_t id_link_addr_o
     );
 
     opcode_t opcode;
@@ -34,8 +29,8 @@ module id(
     assign opcode = opcode_t'(id_inst_i[31:26]);
     assign funct = funct_t'(id_inst_i[5:0]);
 
-    pc_t delayslot_addr;
-    pc_t return_addr;
+    inst_addr_t delayslot_addr;
+    inst_addr_t return_addr;
     assign delayslot_addr = id_pc_i + 32'h0000_0004;
     assign return_addr = id_pc_i + 32'h0000_0008;
 

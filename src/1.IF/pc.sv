@@ -7,7 +7,7 @@ module pc(
     input logic [5:0] stall,
     input jump_t id_jumpreq,
 
-    output pc_t if_pc_o,
+    output inst_addr_t if_pc_o,
     output chip_status_t if_ce_o
 );
 

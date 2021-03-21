@@ -6,10 +6,10 @@ module if_id(
 
         input logic [5:0] stall,
 
-        input pc_t if_pc_o,
+        input inst_addr_t if_pc_o,
         input inst_t rom_inst_o,
 
-        output pc_t id_pc_i,
+        output inst_addr_t id_pc_i,
         output inst_t id_inst_i
     );
 

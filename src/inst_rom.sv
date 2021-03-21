@@ -2,7 +2,7 @@ import project_types::*;
 
 module inst_rom (
     input chip_status_t ce,
-    input pc_t pc,
+    input inst_addr_t pc,
 
     output inst_t inst
 );

@@ -16,7 +16,7 @@ package project_types;
         CHIP_DISABLE = 1'b0
     } chip_status_t;
 
-    typedef logic [31:0] pc_t;
+    typedef logic [31:0] inst_addr_t;
     typedef logic [31:0] inst_t;
 
     //register types
@@ -47,7 +47,7 @@ package project_types;
 
     typedef struct {
         jump_status_t en;
-        pc_t addr;
+        inst_addr_t addr;
     } jump_t;
 
     typedef logic [31:0] ram_addr_t;

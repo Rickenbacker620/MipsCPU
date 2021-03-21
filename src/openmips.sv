@@ -4,9 +4,9 @@ module openmips(
     input logic clk,
     input reset_status_t rst,
 
-    output chip_status_t rom_ce,
-    output pc_t rom_addr,
-    input inst_t rom_data,
+    output chip_status_t rom_ce_o,
+    output inst_addr_t rom_addr_o,
+    input inst_t rom_data_i,
 
     output chip_status_t ram_ce_o,
     output logic ram_we_o,
@@ -23,8 +23,8 @@ module openmips(
     inst_t rom_inst_o;
     inst_t id_inst_i;
 
-    pc_t if_pc_o;
-    pc_t id_pc_i;
+    inst_addr_t if_pc_o;
+    inst_addr_t id_pc_i;
 
 
     chip_status_t if_ce_o;
@@ -46,15 +46,10 @@ module openmips(
     reg_t wb_wreg_o;
 
     logic [5:0] stall;
-    logic id_in_delayslot_i;
-    logic ex_now_in_delayslot_i;
     logic ex_stallreq;
     logic id_stallreq;
-    pc_t ex_link_addr_i;
-    logic id_next_in_delayslot_o;
-
-    logic id_now_in_delayslot_o;
-    pc_t id_link_addr_o;
+    inst_addr_t ex_link_addr_i;
+    inst_addr_t id_link_addr_o;
 
     ram_addr_t ex_ramaddr_o;
     ram_addr_t ex_ramaddr_i;

@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 import project_types::*;
 
-module openmips_min_sopc_tb();
+module openmips_min_soinst_addr_tb();
 
 logic CLOCK_50;
 reset_status_t rst;

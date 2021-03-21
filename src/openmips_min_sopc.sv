@@ -6,7 +6,7 @@ module openmips_min_sopc (
 );
 
     chip_status_t rom_ce;
-    pc_t rom_pc;
+    inst_addr_t rom_pc;
     inst_t rom_inst;
 
     chip_status_t ram_ce;
@@ -20,11 +20,10 @@ module openmips_min_sopc (
         .*,
         .rom_ce(rom_ce),
         .rom_addr(rom_pc),
-        .rom_data(rom_inst),
-
+        .rom_data_i(rom_inst),
 
         .ram_ce_o(ram_ce),
-        .ram_we_o(ram_o),
+        .ram_we_o(ram_we),
         .ram_sel_o(ram_sel),
         .ram_addr_o(ram_addr),
         .ram_data_o(ram_write_data),
@@ -38,15 +37,13 @@ module openmips_min_sopc (
     );
 
     data_ram data_ram0(
-
-    .*,
-
-    .ce(ram_ce),
-    .we(ram_we),
-    .sel(ram_sel),
-    .addr(ram_addr),
-    .data_i(ram_write_data),
-    .data_o(ram_read_data)
+        .*,
+        .ce(ram_ce),
+        .we(ram_we),
+        .sel(ram_sel),
+        .addr(ram_addr),
+        .data_i(ram_write_data),
+        .data_o(ram_read_data)
     );
 
 endmodule
