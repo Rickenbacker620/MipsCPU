@@ -38,7 +38,7 @@ package project_types;
         reg_addr_t addr;
         reg_data_t data;
     } reg_t;
-
+;
     //control types
     typedef enum logic {
         JUMP_ENABLE = 1'b1,

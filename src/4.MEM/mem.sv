@@ -30,23 +30,61 @@ module mem(
                 LW_OP: begin
                     mem_we_o = 1'b0;
                     mem_ce_o = CHIP_ENABLE;
-                    mem_wreg_o.data = ram.read;
+                    mem_wreg_o.data = mem_data_i;
+                    mem_sel_o = 4'b1111;
                 end
                 LB_OP: begin
                     mem_we_o = 1'b0;
                     mem_ce_o = CHIP_ENABLE;
-                    mem_wreg_o.data = ram.read;
+
+                    case (mem_ramaddr_i[1:0])
+                    2'b00: begin
+                        mem_sel_o = 4'b1110;
+                        mem_wreg_o.data = {{24{mem_data_i[7]}}, mem_data_i[7:0]};
+                    end
+                    2'b01: begin
+                        mem_sel_o = 4'b1101;
+                        mem_wreg_o.data = {{24{mem_data_i[15]}}, mem_data_i[15:8]};
+                    end
+                    2'b10: begin
+                        mem_sel_o = 4'b1011;
+                        mem_wreg_o.data = {{24{mem_data_i[23]}}, mem_data_i[23:16]};
+                    end
+                    2'b11: begin
+                        mem_sel_o = 4'b0111;
+                        mem_wreg_o.data = {{24{mem_data_i[31]}}, mem_data_i[31:24]};
+                    end
+                    default: begin
+                        mem_sel_o = 4'b1111;
+                        mem_wreg_o.data = mem_data_i;
+                    end
+                    endcase
                 end
                 SW_OP: begin
                     mem_we_o = 1'b1;
                     mem_ce_o = CHIP_ENABLE;
                     mem_data_o = mem_wreg_i.data;
+                    mem_sel_o = 4'b1111;
                 end
                 SB_OP: begin
                     mem_we_o = 1'b1;
                     mem_ce_o = CHIP_ENABLE;
                     mem_data_o = mem_wreg_i.data;
+
+                    case (mem_ramaddr_i[1:0])
+                    2'b00:
+                        mem_sel_o = 4'b1110;
+                    2'b01:
+                        mem_sel_o = 4'b1101;
+                    2'b10:
+                        mem_sel_o = 4'b1011;
+                    2'b11:
+                        mem_sel_o = 4'b0111;
+                    default:
+                        mem_sel_o = 4'b0000;
+                    endcase
                 end
+
                 default: begin
                     mem_we_o = 1'b0;
                     mem_ce_o = CHIP_DISABLE;

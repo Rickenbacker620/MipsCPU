@@ -15,12 +15,12 @@ module if_id(
 
     always_ff @ (posedge clk) begin
         if (rst == RST_ENABLE) begin
-            id_pc_i <= '{default:0};
-            id_inst_i <= '{default:0};
+            id_pc_i <= '0;
+            id_inst_i <= '0;
         end
         else if (stall[1] == 1'b1 && stall[2] == 1'b0) begin
-            id_pc_i <= '{default:0};
-            id_inst_i <= '{default:0};
+            id_pc_i <= '0;
+            id_inst_i <= '0;
         end
         else begin
             id_pc_i <= if_pc_o;

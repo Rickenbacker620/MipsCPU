@@ -135,6 +135,20 @@ module id(
                 read.r2_info = '{default:0};
                 immo = immexts;
             end
+            I_SB: begin
+                id_alu_o = '{RES_LOAD_STORE, SB_OP};
+                id_wreg_o = '{REG_ENABLE, 5'b00000};
+                read.r1_info = '{REG_ENABLE, rt};
+                read.r2_info = '{default:0};
+                immo = immexts;
+            end
+            I_SW: begin
+                id_alu_o = '{RES_LOAD_STORE, SW_OP};
+                id_wreg_o = '{REG_ENABLE, 5'b00000};
+                read.r1_info = '{REG_ENABLE, rt};
+                read.r2_info = '{default:0};
+                immo = immexts;
+            end
             I_ANDI: begin
                 id_alu_o = '{RES_LOGIC, AND_OP};
                 id_wreg_o = '{REG_ENABLE, rt};

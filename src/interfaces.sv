@@ -1,6 +1,5 @@
 import project_types::*;
 
-
 interface i_regbus;
     reg_info_t r1_info;
     reg_info_t r2_info;

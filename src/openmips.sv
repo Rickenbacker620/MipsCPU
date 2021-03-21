@@ -5,7 +5,7 @@ module openmips(
     input reset_status_t rst,
 
     output chip_status_t rom_ce,
-    output pc_t rom_addr
+    output pc_t rom_addr,
     input inst_t rom_data,
 
     output chip_status_t ram_ce_o,
@@ -17,7 +17,6 @@ module openmips(
 );
 
     i_regbus regbus();
-    i_membus membus();
 
     jump_t id_jumpreq;
 
@@ -69,6 +68,7 @@ module openmips(
     assign rom_addr = if_pc_o;
     assign rom_inst_o = rom_data;
 
+
     regfile regfile1(.*, .read(regbus.slave));
 
     pc pc0(.*);
@@ -85,13 +85,16 @@ module openmips(
 
     mem mem0(
         .*,
-        .ram(membus.master)
+        .mem_ce_o(ram_ce_o),
+        .mem_we_o(ram_we_o),
+        .mem_sel_o(ram_sel_o),
+        .mem_addr_o(ram_addr_o),
+        .mem_data_i(ram_data_i),
+        .mem_data_o(ram_data_o)
     );
 
     mem_wb mem_wb0(.*);
 
     ctrl ctrl0(.*);
-
-    data_ram data_ram0(.*, .ram(membus.slave));
 
 endmodule

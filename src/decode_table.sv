@@ -37,15 +37,13 @@ package decode_table;
 
         R_JR = 6'b001000,
 
-        R_ADDU = 6'b100001,
+        R_ADDU = 6'b100001
     } funct_t;
 
     typedef enum logic [2:0] {
         RES_LOGIC,
         RES_SHIFT,
         RES_ARITH,
-        RES_NOP,
-        RES_MOVE,
         RES_JUMP,
         RES_LOAD_STORE
     } alu_sel_t;

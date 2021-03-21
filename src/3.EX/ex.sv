@@ -24,6 +24,8 @@ module ex(
     reg_data_t arithres;
     reg_data_t moveres;
 
+    assign ex_alu_o = ex_alu_i;
+
     always_comb begin: logic_opration
         if (rst == RST_ENABLE)
             logicres = '0;
@@ -57,13 +59,21 @@ module ex(
     always_comb begin : load_store_operation
         if (rst == RST_ENABLE) begin
             ex_ramaddr_o = '0;
-            ex_alu_i = ex_alu_o;
         end
         else case (ex_alu_i.op)
-                LB_OP: ex_ramaddr_o = ex_oprd1_i + ex_oprd2_i;
-                LW_OP: ex_ramaddr_o = ex_oprd1_i + ex_oprd2_i;
-                SB_OP: ex_ramaddr_o = ex_oprd1_i + ex_oprd2_i;
-                SW_OP: ex_ramaddr_o = ex_oprd1_i + ex_oprd2_i;
+                LB_OP: begin
+                    ex_ramaddr_o = ex_oprd1_i + ex_oprd2_i;
+                end
+                LW_OP: begin
+                    ex_ramaddr_o = ex_oprd1_i + ex_oprd2_i;
+                end
+                SB_OP: begin
+                    ex_ramaddr_o = ex_oprd1_i + ex_oprd2_i;
+
+                end
+                SW_OP: begin
+                    ex_ramaddr_o = ex_oprd1_i + ex_oprd2_i;
+                end
                 default: ex_ramaddr_o = '0;
             endcase
     end
@@ -76,6 +86,7 @@ module ex(
             RES_SHIFT: ex_wreg_o.data = shiftres;
             RES_ARITH: ex_wreg_o.data = arithres;
             RES_JUMP: ex_wreg_o.data = ex_link_addr_i;
+            RES_LOAD_STORE: ex_wreg_o.data = ex_oprd1_i;
             default: ex_wreg_o.data = '0;
         endcase
     end
