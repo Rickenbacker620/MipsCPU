@@ -26,9 +26,7 @@ module openmips(
     inst_addr_t if_pc_o;
     inst_addr_t id_pc_i;
 
-
     chip_status_t if_ce_o;
-
 
     alu_t id_alu_o;
     reg_data_t id_oprd1_o;
@@ -61,7 +59,7 @@ module openmips(
 
     assign rom_ce = if_ce_o;
     assign rom_addr = if_pc_o;
-    assign rom_inst_o = rom_data;
+    assign rom_inst_o = rom_data_i;
 
 
     regfile regfile1(.*, .read(regbus.slave));
