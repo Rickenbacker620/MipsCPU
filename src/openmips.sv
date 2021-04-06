@@ -57,8 +57,8 @@ module openmips(
     alu_t ex_alu_o;
     alu_t mem_alu_i;
 
-    assign rom_ce = if_ce_o;
-    assign rom_addr = if_pc_o;
+    assign rom_ce_o = if_ce_o;
+    assign rom_addr_o = if_pc_o;
     assign rom_inst_o = rom_data_i;
 
 

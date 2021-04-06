@@ -7,7 +7,8 @@ module inst_rom (
     output inst_t inst
 );
 
-    inst_t inst_mem [0: 131071 - 1];
+    // inst_t inst_mem [0: 131071 - 1];
+    inst_t inst_mem [0: 1234 - 1];
 
     initial
         $readmemh("C:/Users/paras/Documents/Projects/MipsCPU/mock/rom.data", inst_mem);
