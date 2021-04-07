@@ -15,8 +15,8 @@ end
 
 initial begin
     rst = RST_ENABLE;
-    #195 rst = RST_DISABLE;
-    #1000 $stop;
+    #400 rst = RST_DISABLE;
+    #2000 $stop;
 end
 
 openmips_min_sopc openmips_min_sopc0(
